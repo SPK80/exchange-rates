@@ -1,7 +1,6 @@
 import { Table } from 'antd';
 import './App.css';
 import 'antd/dist/antd.css';
-
 import daily from './daily.json';
 
 function App() {
@@ -15,44 +14,37 @@ function App() {
 	];
 	console.log(dataSource);
 
-	// function onChange(pagination, filters, sorter, extra) {
-	// 	console.log('params', pagination, filters, sorter, extra);
-	// }
-	// const dataSource = [
-	// 	{
-	// 		key: '1',
-	// 		name: 'Mike',
-	// 		age: 32,
-	// 		address: '10 Downing Street',
-	// 	},
-	// 	{
-	// 		key: '2',
-	// 		name: 'John',
-	// 		age: 42,
-	// 		address: '10 Downing Street',
-	// 	},
-	// ];
-	// console.log(dataSource);
 	const columns = [
 		{
-			title: 'Name',
+			title: 'Валюта',
 			dataIndex: 'name',
 			key: 'key',
+			// align: 'left',
+			className: 'Name',
+			width: '80%',
 		},
 		{
 			title: 'Value',
 			dataIndex: 'value',
 			key: 'key',
+			// align: 'right',
+			width: '20%',
+
 		},
 
 	];
 
 	return (
-		<Table
-			size={'middle'}
-			dataSource={dataSource}
-			columns={columns}
-		/>
+
+		<div className='Wrapper'>
+
+			<Table
+				size={'middle'}
+				dataSource={dataSource}
+				columns={columns}
+			/>
+
+		</div>
 	);
 }
 
