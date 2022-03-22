@@ -10,9 +10,8 @@ function App() {
 			.map(v => ({
 				...v,
 				key: v.ID,
-				delta: (`(${(v.Value - v.Previous).toFixed(1)})`)
-			}
-			))
+				delta: (`(${((v.Value - v.Previous) / v.Value * 100).toFixed(1)}%)`)
+			}))
 	];
 
 	const columns = [
@@ -55,6 +54,15 @@ function App() {
 
 	];
 
+	function CustomRow(props) {
+		const name = dataSource.find(dataRow => dataRow.key === props['data-row-key']).Name;
+		return (
+			<Tooltip title={name}>
+				<tr {...props} />
+			</Tooltip>
+		);
+	}
+
 	return (
 
 		<div className='Wrapper'>
@@ -63,14 +71,8 @@ function App() {
 					size={'middle'}
 					dataSource={dataSource}
 					columns={columns}
+					components={{ body: { row: CustomRow } }}
 					pagination={{ pageSize: 20 }}
-					onRow={(record, index) => ({
-						// onClick: event => { console.log(event) }, // click row
-						// onDoubleClick: event => { console.log(event) }, // double click row
-						// onContextMenu: event => { console.log(event) }, // right button click row
-						onMouseEnter: event => { console.log(event) }, // mouse enter row
-						onMouseLeave: event => { console.log(event) }, // mouse leave row
-					})}
 				/>
 			</div>
 		</div>
