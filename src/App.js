@@ -57,7 +57,11 @@ function App() {
 	function CustomRow(props) {
 		const name = dataSource.find(dataRow => dataRow.key === props['data-row-key']).Name;
 		return (
-			<Tooltip title={name}>
+			<Tooltip
+				title={name}
+				placement="left"
+				mouseEnterDelay={0.05}
+			>
 				<tr {...props} />
 			</Tooltip>
 		);
@@ -73,6 +77,10 @@ function App() {
 					columns={columns}
 					components={{ body: { row: CustomRow } }}
 					pagination={{ pageSize: 20 }}
+					onRow={(record, index) => ({
+						onClick: event => { console.log(record) }, // click row
+					})}
+
 				/>
 			</div>
 		</div>
