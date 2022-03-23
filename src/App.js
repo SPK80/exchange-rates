@@ -1,36 +1,12 @@
 import { Button, Table, Tooltip } from 'antd';
 import './App.css';
 import 'antd/dist/antd.css';
-import axios from 'axios';
 import { useState } from 'react';
+import { fetchValute } from './dataApi';
 
 function App() {
 
 	const [loading, setLoading] = useState(false);
-
-	async function fetchTodayDaily() {
-		try {
-			setLoading(true);
-			const dailyData = await axios.get('https://www.cbr-xml-daily.ru/daily_json.js');
-			return dailyData?.data;
-		} catch (error) {
-			console.error(error);
-		} finally {
-			setLoading(false);
-		}
-	}
-
-	function prepareData(data) {
-		if (!data) return []
-		return [
-			...Object.values(data.Valute)
-				.map(v => ({
-					...v,
-					key: v.ID,
-					delta: (`(${((v.Value - v.Previous) / v.Value * 100).toFixed(1)}%)`)
-				}))
-		];
-	}
 
 	const [dataSource, setDataSource] = useState([]);
 
@@ -86,10 +62,30 @@ function App() {
 		);
 	}
 
-	async function getData() {
-		setDataSource(prepareData(await fetchTodayDaily()));
+
+	function prepareData(valute) {
+		if (!valute) return []
+		return [
+			...Object.values(valute)
+				.map(v => ({
+					...v,
+					key: v.ID,
+					delta: (`(${((v.Value - v.Previous) / v.Value * 100).toFixed(1)}%)`)
+				}))
+		];
 	}
-	
+
+	async function getData() {
+		setLoading(true);
+		try {
+			setDataSource(prepareData(await fetchValute()));
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setLoading(false);
+		}
+	}
+
 	return (
 
 		<div className='Wrapper'>
