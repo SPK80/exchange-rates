@@ -29,13 +29,11 @@ function App() {
 		},
 		{
 			title: 'Курс',
-			colSpan: 2,
 			dataIndex: 'Value',
 			key: 'key',
 		},
 		{
 			title: 'Изменение курса',
-			colSpan: 0,
 			dataIndex: 'delta',
 			key: 'key',
 			width: '10%',
@@ -59,8 +57,9 @@ function App() {
 		return (
 			<Tooltip
 				title={name}
-				placement="left"
-				mouseEnterDelay={0.05}
+				placement="topLeft"
+				mouseEnterDelay={0.02}
+				mouseLeaveDelay={0.02}
 			>
 				<tr {...props} />
 			</Tooltip>

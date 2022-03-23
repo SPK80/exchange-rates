@@ -11,9 +11,6 @@
 }
 
 .Table{
-	/* display: flex;
-  flex-direction: column;
-	height: 100vh;	 */
-	max-width: 800px;
-	/* min-height: 800px;   */
+	max-width: 600px;
+	margin-left: 10px;
 }
