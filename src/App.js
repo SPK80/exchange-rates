@@ -1,18 +1,38 @@
-import { Table, Tooltip } from 'antd';
+import { Button, Table, Tooltip } from 'antd';
 import './App.css';
 import 'antd/dist/antd.css';
-import daily from './daily.json';
+import axios from 'axios';
+import { useState } from 'react';
 
 function App() {
 
-	const dataSource = [
-		...Object.values(daily.Valute)
-			.map(v => ({
-				...v,
-				key: v.ID,
-				delta: (`(${((v.Value - v.Previous) / v.Value * 100).toFixed(1)}%)`)
-			}))
-	];
+	const [loading, setLoading] = useState(false);
+
+	async function fetchTodayDaily() {
+		try {
+			setLoading(true);
+			const dailyData = await axios.get('https://www.cbr-xml-daily.ru/daily_json.js');
+			return dailyData?.data;
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setLoading(false);
+		}
+	}
+
+	function prepareData(data) {
+		if (!data) return []
+		return [
+			...Object.values(data.Valute)
+				.map(v => ({
+					...v,
+					key: v.ID,
+					delta: (`(${((v.Value - v.Previous) / v.Value * 100).toFixed(1)}%)`)
+				}))
+		];
+	}
+
+	const [dataSource, setDataSource] = useState([]);
 
 	const columns = [
 
@@ -53,7 +73,7 @@ function App() {
 	];
 
 	function CustomRow(props) {
-		const name = dataSource.find(dataRow => dataRow.key === props['data-row-key']).Name;
+		const name = dataSource.find(dataRow => dataRow.key === props['data-row-key'])?.Name;
 		return (
 			<Tooltip
 				title={name}
@@ -66,12 +86,23 @@ function App() {
 		);
 	}
 
+	async function getData() {
+		setDataSource(prepareData(await fetchTodayDaily()));
+	}
+	
 	return (
 
 		<div className='Wrapper'>
+			<div>
+				<Button
+					onClick={getData}
+				>Load</Button>
+			</div>
+
 			<div className='Table'>
 				<Table
 					size={'middle'}
+					loading={loading}
 					dataSource={dataSource}
 					columns={columns}
 					components={{ body: { row: CustomRow } }}
