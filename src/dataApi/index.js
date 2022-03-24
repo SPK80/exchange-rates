@@ -21,6 +21,38 @@ function getValute(data) {
 	return data?.Valute ?? [];
 }
 
-export function fetchValute(daysAgo = 0) {
+export function getTodayDailyValute() {
 	return fetchDaily(todayDailyUrl);
+}
+
+const last10Days = {
+	loaded: false,
+	daysData: [],
+};
+
+async function loadLast10Days() {
+	let dayCount = 10;
+	let url = todayDailyUrl;
+	try {
+		do {
+			const data = await fetchDaily(url);
+			url = data.PreviousURL;
+			last10Days.daysData.push(data);
+		} while (--dayCount > 0);
+
+	} catch (error) {
+		console.error(error);
+	}
+}
+
+export function getLast10DaysOf(ValuteID) {
+	if (!last10Days.loaded) {
+		loadLast10Days();
+	}
+
+	return last10Days.daysData.reduse((valuteDays, day) => {
+		const valute = day.Valute.find(v => v.ID === ValuteID);
+		valuteDays.push(valute);
+	}, [])
+
 }

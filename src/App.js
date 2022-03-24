@@ -2,7 +2,7 @@ import { Button, Table, Tooltip } from 'antd';
 import './App.css';
 import 'antd/dist/antd.css';
 import { useState } from 'react';
-import { fetchValute } from './dataApi';
+import { getTodayDailyValute } from './dataApi';
 
 function App() {
 
@@ -78,7 +78,7 @@ function App() {
 	async function getData() {
 		setLoading(true);
 		try {
-			setDataSource(prepareData(await fetchValute()));
+			setDataSource(prepareData(await getTodayDailyValute()));
 		} catch (error) {
 			console.error(error);
 		} finally {
