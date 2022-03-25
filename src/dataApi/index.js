@@ -1,8 +1,5 @@
 import axios from 'axios';
 
-const todayDailyUrl = 'https://www.cbr-xml-daily.ru/daily_json.js';
-let predDailyUrl = '';
-
 function fetchDaily(url) {
 	return new Promise((resolve, reject) => {
 		axios.get(url)
@@ -22,39 +19,30 @@ function getValute(data) {
 }
 
 export async function getTodayDailyValute() {
-	return getValute(await fetchDaily(todayDailyUrl));
+	return getValute(daysData[0]);
 }
 
-const last10Days = {
-	loaded: false,
-	daysData: [],
-};
+const daysData = [];
 
-async function loadLast10Days() {
+export async function loadLast10Days() {
+	const todayDailyUrl = 'https://www.cbr-xml-daily.ru/daily_json.js';
 	let dayCount = 10;
 	let url = todayDailyUrl;
 	try {
 		do {
 			const data = await fetchDaily(url);
 			url = data.PreviousURL;
-			last10Days.daysData.push(data);
-		} while (--dayCount > 0);
-		last10Days.loaded = true;
+			daysData.push(data);
+		} while (--dayCount > 0);		
 	} catch (error) {
 		console.error(error);
 	}
 }
 
 export async function getLast10DaysOf(valuteCharCode) {
-	if (!last10Days.loaded) {
-		await loadLast10Days();
-	}
-
-	if (last10Days.loaded)
-		return last10Days.daysData.reduce((valuteDays, dayData) => {
+		return daysData.reduce((valuteDays, dayData) => {
 			const valute = dayData.Valute[valuteCharCode];
 			valuteDays.push(valute.Value);
 			return valuteDays;
-		}, [])
-	else return [];
+		}, [])	
 }
