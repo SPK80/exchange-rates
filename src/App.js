@@ -2,7 +2,7 @@ import { Button, Table, Tooltip } from 'antd';
 import './App.css';
 import 'antd/dist/antd.css';
 import { useState } from 'react';
-import { getLast10DaysOf, getTodayDailyValute, loadLast10Days } from './dataApi';
+import { getDailyValute, getLast10DaysOf, loadLastDays } from './dataApi';
 
 function App() {
 
@@ -78,8 +78,8 @@ function App() {
 	async function getData() {
 		setLoading(true);
 		try {
-			await loadLast10Days();
-			setDataSource(prepareData(await getTodayDailyValute()));
+			await loadLastDays();
+			setDataSource(prepareData(await getDailyValute()));
 		} catch (error) {
 			console.error(error);
 		} finally {

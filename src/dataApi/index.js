@@ -18,13 +18,13 @@ function getValute(data) {
 	return data?.Valute ?? [];
 }
 
-export async function getTodayDailyValute() {
-	return getValute(daysData[0]);
+export async function getDailyValute(daysAgo = 0) {
+	return getValute(daysData[daysAgo]);
 }
 
 const daysData = [];
 
-export async function loadLast10Days() {
+export async function loadLastDays(days = 10) {
 	const todayDailyUrl = 'https://www.cbr-xml-daily.ru/daily_json.js';
 	let dayCount = 10;
 	let url = todayDailyUrl;
@@ -33,16 +33,16 @@ export async function loadLast10Days() {
 			const data = await fetchDaily(url);
 			url = data.PreviousURL;
 			daysData.push(data);
-		} while (--dayCount > 0);		
+		} while (--dayCount > 0);
 	} catch (error) {
 		console.error(error);
 	}
 }
 
 export async function getLast10DaysOf(valuteCharCode) {
-		return daysData.reduce((valuteDays, dayData) => {
-			const valute = dayData.Valute[valuteCharCode];
-			valuteDays.push(valute.Value);
-			return valuteDays;
-		}, [])	
+	return daysData.reduce((valuteDays, dayData) => {
+		const valute = dayData.Valute[valuteCharCode];
+		valuteDays.push(valute.Value);
+		return valuteDays;
+	}, [])
 }
