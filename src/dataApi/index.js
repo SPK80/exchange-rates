@@ -9,7 +9,7 @@ function fetchDaily(url) {
 			.then(response => {
 				// console.log(response);
 				if (response.status === 200)
-					resolve(getValute(response.data));
+					resolve(response.data);
 				else
 					reject(response);
 			})
@@ -21,8 +21,8 @@ function getValute(data) {
 	return data?.Valute ?? [];
 }
 
-export function getTodayDailyValute() {
-	return fetchDaily(todayDailyUrl);
+export async function getTodayDailyValute() {
+	return getValute(await fetchDaily(todayDailyUrl));
 }
 
 const last10Days = {
@@ -39,20 +39,22 @@ async function loadLast10Days() {
 			url = data.PreviousURL;
 			last10Days.daysData.push(data);
 		} while (--dayCount > 0);
-
+		last10Days.loaded = true;
 	} catch (error) {
 		console.error(error);
 	}
 }
 
-export function getLast10DaysOf(ValuteID) {
+export async function getLast10DaysOf(ValuteID) {
 	if (!last10Days.loaded) {
-		loadLast10Days();
+		await loadLast10Days();
 	}
 
-	return last10Days.daysData.reduse((valuteDays, day) => {
-		const valute = day.Valute.find(v => v.ID === ValuteID);
-		valuteDays.push(valute);
-	}, [])
-
+	if (last10Days.loaded)
+		return last10Days.daysData.reduce((valuteDays, dayData) => {
+			const valute = [...Object.values(dayData.Valute)].find(v => v.ID === ValuteID);
+			valuteDays.push(valute);
+			return valuteDays;
+		}, [])
+	else return [];
 }

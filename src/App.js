@@ -2,7 +2,7 @@ import { Button, Table, Tooltip } from 'antd';
 import './App.css';
 import 'antd/dist/antd.css';
 import { useState } from 'react';
-import { getTodayDailyValute } from './dataApi';
+import { getLast10DaysOf, getTodayDailyValute } from './dataApi';
 
 function App() {
 
@@ -104,7 +104,11 @@ function App() {
 					components={{ body: { row: CustomRow } }}
 					pagination={{ pageSize: 20 }}
 					onRow={(record, index) => ({
-						onClick: event => { console.log(record) }, // click row
+						onClick: async e => {
+							console.log(record);
+							const ld = await getLast10DaysOf(record.ID);
+							console.log(ld);
+						}, // click row
 					})}
 
 				/>
