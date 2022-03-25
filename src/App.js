@@ -105,8 +105,7 @@ function App() {
 					pagination={{ pageSize: 20 }}
 					onRow={(record, index) => ({
 						onClick: async e => {
-							console.log(record);
-							const ld = await getLast10DaysOf(record.ID);
+							const ld = await getLast10DaysOf(record.CharCode);
 							console.log(ld);
 						}, // click row
 					})}

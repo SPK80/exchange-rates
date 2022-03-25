@@ -45,15 +45,15 @@ async function loadLast10Days() {
 	}
 }
 
-export async function getLast10DaysOf(ValuteID) {
+export async function getLast10DaysOf(valuteCharCode) {
 	if (!last10Days.loaded) {
 		await loadLast10Days();
 	}
 
 	if (last10Days.loaded)
 		return last10Days.daysData.reduce((valuteDays, dayData) => {
-			const valute = [...Object.values(dayData.Valute)].find(v => v.ID === ValuteID);
-			valuteDays.push(valute);
+			const valute = dayData.Valute[valuteCharCode];
+			valuteDays.push(valute.Value);
 			return valuteDays;
 		}, [])
 	else return [];
