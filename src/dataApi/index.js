@@ -45,9 +45,10 @@ function getValute(data) {
 export async function getLast10DaysOf(valuteCharCode) {
 	return Array.from(Array(10).keys()).reduce((valuteDays, day) => {
 		const dailyData = getValute(daysData[day]);
-		console.log(dailyData);
 		const valute = dailyData[valuteCharCode];
-		valuteDays.push(valute.Value);
+		valuteDays.push({
+			Value: valute.Value,
+		});
 		return valuteDays;
 	}, [])
 }

@@ -68,7 +68,8 @@ function App() {
 		return [
 			...Object.values(valute)
 				.map(v => ({
-					...v,
+					Value: v.Value,
+					CharCode: v.CharCode,
 					key: v.ID,
 					delta: (`(${((v.Value - v.Previous) / v.Value * 100).toFixed(1)}%)`)
 				}))
