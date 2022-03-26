@@ -42,13 +42,16 @@ function getValute(data) {
 	return data?.Valute ?? [];
 }
 
-export async function getLast10DaysOf(valuteCharCode) {
-	return Array.from(Array(10).keys()).reduce((valuteDays, day) => {
-		const dailyData = getValute(daysData[day]);
-		const valute = dailyData[valuteCharCode];
-		valuteDays.push({
-			Value: valute.Value,
-		});
-		return valuteDays;
-	}, [])
+export function getLastDaysOf(valuteCharCode, daysNumber = daysData.length - 1) {
+	return Array.from(Array(daysNumber).keys())
+		.reduce((valuteDays, day) => {
+			const dailyData = getValute(daysData[day + 1]);
+			const valute = dailyData[valuteCharCode];
+			valuteDays.push({
+				Value: valute.Value,
+				Previous: valute.Previous,
+
+			});
+			return valuteDays;
+		}, [])
 }

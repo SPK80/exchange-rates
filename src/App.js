@@ -2,50 +2,30 @@ import { Button, Table, Tooltip } from 'antd';
 import './App.css';
 import 'antd/dist/antd.css';
 import { useState } from 'react';
-import { getDailyValute, getLast10DaysOf } from './dataApi';
+import { getDailyValute, getLastDaysOf } from './dataApi';
 
 function App() {
 
 	const [loading, setLoading] = useState(false);
-
 	const [dataSource, setDataSource] = useState([]);
 
 	const columns = [
-
-		// {
-		// 	title: 'Валюта',
-		// 	dataIndex: 'Name',
-		// 	key: 'ID',
-		// 	width: '40%',
-		// },
 		{
+			key: 'CharCode',
 			title: 'Букв. код',
 			dataIndex: 'CharCode',
-			key: 'key',
 		},
 		{
+			key: 'Value',
 			title: 'Курс',
 			dataIndex: 'Value',
-			key: 'key',
 		},
 		{
+			key: 'delta',
 			title: 'Изменение курса',
 			dataIndex: 'delta',
-			key: 'key',
 			width: '10%',
 		},
-		// {
-		// 	title: 'Цифр. код',
-		// 	dataIndex: 'NumCode',
-		// 	key: 'ID',
-		// },
-
-		// {
-		// 	title: 'Единиц',
-		// 	dataIndex: 'Nominal',
-		// 	key: 'ID',
-		// },
-
 	];
 
 	function CustomRow(props) {
@@ -62,16 +42,30 @@ function App() {
 		);
 	}
 
+	function renderDeltaPercent(Value, Previous) {
+		return `(${((Value - Previous) / Value * 100).toFixed(1)}%)`
+	}
 
 	function prepareData(valute) {
 		if (!valute) return []
+		function prepareChildData(charCode) {
+			const data = getLastDaysOf(charCode)
+			return data.map((valute, index) => ({
+				Value: valute.Value,
+				key: charCode + index,
+				delta: renderDeltaPercent(valute.Value, valute.Previous),
+			}))
+		}
+
 		return [
 			...Object.values(valute)
-				.map(v => ({
-					Value: v.Value,
-					CharCode: v.CharCode,
-					key: v.ID,
-					delta: (`(${((v.Value - v.Previous) / v.Value * 100).toFixed(1)}%)`)
+				.map(valute => ({
+					key: valute.ID,
+					Name: valute.Name,
+					CharCode: valute.CharCode,
+					Value: valute.Value,
+					delta: renderDeltaPercent(valute.Value, valute.Previous),
+					children: prepareChildData(valute.CharCode),
 				}))
 		];
 	}
@@ -103,11 +97,11 @@ function App() {
 					dataSource={dataSource}
 					columns={columns}
 					components={{ body: { row: CustomRow } }}
-					pagination={{ pageSize: 20 }}
+					pagination={{ pageSize: 10 }}
 					onRow={(record, index) => ({
-						onClick: async e => {
-							const ld = await getLast10DaysOf(record.CharCode);
-							console.log(ld);
+						onClick: e => {
+							// const ld = getLast9DaysOf(record.CharCode);
+							// console.log(ld);
 						}, // click row
 					})}
 
