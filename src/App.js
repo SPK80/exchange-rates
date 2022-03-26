@@ -96,15 +96,9 @@ function App() {
 					loading={loading}
 					dataSource={dataSource}
 					columns={columns}
+					expandRowByClick={true}
 					components={{ body: { row: CustomRow } }}
 					pagination={{ pageSize: 10 }}
-					onRow={(record, index) => ({
-						onClick: e => {
-							// const ld = getLast9DaysOf(record.CharCode);
-							// console.log(ld);
-						}, // click row
-					})}
-
 				/>
 			</div>
 		</div>
