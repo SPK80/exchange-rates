@@ -25,6 +25,13 @@ function App() {
 			title: 'Изменение курса',
 			dataIndex: 'delta',
 			width: '10%',
+			render: delta => {
+				let trendClass = 'LateralTrend'
+				if (delta >= 0.1) trendClass = 'RisingTrend'
+				else if (delta <= -0.1) trendClass = 'DownTrend';
+				return (<span className={trendClass}>{`${delta} %`}</span>);
+			}
+
 		},
 	];
 
@@ -42,8 +49,8 @@ function App() {
 		);
 	}
 
-	function renderDeltaPercent(Value, Previous) {
-		return `(${((Value - Previous) / Value * 100).toFixed(1)}%)`
+	function calcDeltaPercent(Value, Previous) {
+		return ((Value - Previous) / Value * 100).toFixed(1)
 	}
 
 	function prepareData(valute) {
@@ -53,7 +60,7 @@ function App() {
 			return data.map((valute, index) => ({
 				Value: valute.Value,
 				key: charCode + index,
-				delta: renderDeltaPercent(valute.Value, valute.Previous),
+				delta: calcDeltaPercent(valute.Value, valute.Previous),
 			}))
 		}
 
@@ -64,7 +71,7 @@ function App() {
 					Name: valute.Name,
 					CharCode: valute.CharCode,
 					Value: valute.Value,
-					delta: renderDeltaPercent(valute.Value, valute.Previous),
+					delta: calcDeltaPercent(valute.Value, valute.Previous),
 					children: prepareChildData(valute.CharCode),
 				}))
 		];

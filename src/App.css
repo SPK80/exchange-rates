@@ -14,3 +14,15 @@
 	max-width: 600px;
 	margin-left: 10px;
 }
+
+.RisingTrend{
+	color: green;
+}
+
+.DownTrend{
+	color: red;
+}
+
+.LateralTrend{
+	color: blue;
+}
