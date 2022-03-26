@@ -18,16 +18,16 @@ function getPreviousURL(dailyData) {
 	return dailyData.PreviousURL
 }
 
-async function loadLastDays(days = 10) {
+async function loadLastDays(daysNumber = 10) {
 	const daysData = [];
 	const todayDailyUrl = 'https://www.cbr-xml-daily.ru/daily_json.js';
-	let dayCount = days;
-	let url = todayDailyUrl;
+	let dayCount = daysNumber;
+	let dailyUrl = todayDailyUrl;
 	try {
 		do {
-			const data = await fetchDaily(url);
-			url = getPreviousURL(data);
-			daysData.push(data);
+			const dailyData = await fetchDaily(dailyUrl);
+			dailyUrl = getPreviousURL(dailyData);
+			daysData.push(dailyData);
 		} while (--dayCount > 0);
 		return daysData;
 	} catch (error) {
