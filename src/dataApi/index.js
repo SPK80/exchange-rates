@@ -1,22 +1,18 @@
 import axios from 'axios';
 import dataUrl from './dataUrl.json'
 
-function fetchDaily(url) {
-	return new Promise((resolve, reject) => {
-		axios.get(url)
-			.then(response => {
-				// console.log(response);
-				if (response.status === 200)
-					resolve(response.data);
-				else
-					reject(response);
-			})
-			.catch(reject)
-	});
+async function fetchDaily(dailyUrl) {
+	try {
+		const response = await axios.get(dailyUrl);
+		if (response.status !== 200) throw (response);
+		return response.data;
+	} catch (error) {
+		console.error(error);
+	}
 }
 
 function getPreviousURL(dailyData) {
-	return dailyData.PreviousURL
+	return dailyData?.PreviousURL;
 }
 
 async function loadLastDays(daysNumber = 10) {
@@ -26,7 +22,9 @@ async function loadLastDays(daysNumber = 10) {
 	try {
 		do {
 			const dailyData = await fetchDaily(dailyUrl);
+			if (!dailyData) throw ('Error fetchDaily!');
 			dailyUrl = getPreviousURL(dailyData);
+			if (!dailyUrl) throw ('Error getPreviousURL!');
 			daysData.push(dailyData);
 		} while (--dayCount > 0);
 		return daysData;
