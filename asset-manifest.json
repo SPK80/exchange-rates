@@ -1,0 +1,13 @@
+{
+  "files": {
+    "main.css": "/SPK80/exchange-rates/static/css/main.a30f6fd8.css",
+    "main.js": "/SPK80/exchange-rates/static/js/main.d1058cc5.js",
+    "index.html": "/SPK80/exchange-rates/index.html",
+    "main.a30f6fd8.css.map": "/SPK80/exchange-rates/static/css/main.a30f6fd8.css.map",
+    "main.d1058cc5.js.map": "/SPK80/exchange-rates/static/js/main.d1058cc5.js.map"
+  },
+  "entrypoints": [
+    "static/css/main.a30f6fd8.css",
+    "static/js/main.d1058cc5.js"
+  ]
+}
