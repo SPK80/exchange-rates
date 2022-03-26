@@ -1,4 +1,5 @@
 import axios from 'axios';
+import dataUrl from './dataUrl.json'
 
 function fetchDaily(url) {
 	return new Promise((resolve, reject) => {
@@ -20,9 +21,8 @@ function getPreviousURL(dailyData) {
 
 async function loadLastDays(daysNumber = 10) {
 	const daysData = [];
-	const todayDailyUrl = 'https://www.cbr-xml-daily.ru/daily_json.js';
 	let dayCount = daysNumber;
-	let dailyUrl = todayDailyUrl;
+	let dailyUrl = dataUrl.TodayDailyUrl;
 	try {
 		do {
 			const dailyData = await fetchDaily(dailyUrl);
