@@ -28,7 +28,7 @@ function App() {
 		},
 	];
 
-	function CustomRow(props) {
+	function RowTooltip(props) {
 		const name = dataSource.find(dataRow => dataRow.key === props['data-row-key'])?.Name;
 		return (
 			<Tooltip
@@ -97,7 +97,7 @@ function App() {
 					dataSource={dataSource}
 					columns={columns}
 					expandRowByClick={true}
-					components={{ body: { row: CustomRow } }}
+					components={{ body: { row: RowTooltip } }}
 					pagination={{ pageSize: 10 }}
 				/>
 			</div>
