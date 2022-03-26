@@ -1,13 +1,26 @@
 import { Button, Table, Tooltip } from 'antd';
 import './App.css';
 import 'antd/dist/antd.css';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { getDailyValute, getLastDaysOf } from './dataApi';
 
 function App() {
 
 	const [loading, setLoading] = useState(false);
 	const [dataSource, setDataSource] = useState([]);
+
+	async function getData() {
+		setLoading(true);
+		try {
+			setDataSource(prepareData(await getDailyValute()));
+		} catch (error) {
+			console.error(error);
+		} finally {
+			setLoading(false);
+		}
+	}
+
+	useEffect(getData, []);
 
 	const columns = [
 		{
@@ -22,7 +35,7 @@ function App() {
 		},
 		{
 			key: 'delta',
-			title: 'Изменение курса',
+			title: 'Δ',
 			dataIndex: 'delta',
 			width: '10%',
 			render: delta => {
@@ -63,7 +76,6 @@ function App() {
 				delta: calcDeltaPercent(valute.Value, valute.Previous),
 			}))
 		}
-
 		return [
 			...Object.values(valute)
 				.map(valute => ({
@@ -77,26 +89,9 @@ function App() {
 		];
 	}
 
-	async function getData() {
-		setLoading(true);
-		try {
-			setDataSource(prepareData(await getDailyValute()));
-		} catch (error) {
-			console.error(error);
-		} finally {
-			setLoading(false);
-		}
-	}
-
 	return (
 
 		<div className='Wrapper'>
-			<div>
-				<Button
-					onClick={getData}
-				>Load</Button>
-			</div>
-
 			<div className='Table'>
 				<Table
 					size={'middle'}
