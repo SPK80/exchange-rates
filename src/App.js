@@ -2,7 +2,7 @@ import { Table, Tooltip } from 'antd';
 import './App.css';
 import 'antd/dist/antd.css';
 import { useEffect, useState } from 'react';
-import { getToDayValute, getLastDaysOf, loadToday, loadPreviousDays} from './dataApi';
+import { getToDayValute, getLastDaysOf, loadToday, loadPreviousDays } from './dataApi';
 
 function App() {
 
@@ -117,6 +117,7 @@ function App() {
 					components={{ body: { row: RowTooltip } }}
 					pagination={{ pageSize: 10 }}
 				/>
+				<a href='https://www.cbr-xml-daily.ru/' target="_blank">Used API</a>
 			</div>
 		</div>
 	);
