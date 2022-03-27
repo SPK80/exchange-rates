@@ -1,13 +1,15 @@
-import { Table, Tooltip } from 'antd';
+import { Table, Tooltip, Layout } from 'antd';
 import './App.css';
 import 'antd/dist/antd.css';
 import { useEffect, useState } from 'react';
-import { getToDayValute, getLastDaysOf, loadToday, loadPreviousDays } from './dataApi';
+import { getToDayValute, getLastDaysOf, loadToday, loadPreviousDays, getTodayDate } from './dataApi';
 
+const { Header, Content, Footer } = Layout;
 function App() {
 
 	const [loading, setLoading] = useState(false);
 	const [dataSource, setDataSource] = useState([]);
+	const [todayDate, setTodayDate] = useState('');
 
 	useEffect(loadData, []);
 
@@ -18,6 +20,7 @@ function App() {
 			await loadToday();
 			todayData = prepareData(await getToDayValute());
 			setDataSource(todayData);
+			setTodayDate(new Date(getTodayDate()).toLocaleDateString('ru-RU'));
 		} catch (error) {
 			console.error(error);
 			return;
@@ -105,8 +108,15 @@ function App() {
 	}
 
 	return (
-		<div className='Wrapper'>
-			<div className='Table'>
+		// <div className='Wrapper'>
+		<Layout>
+			<Header
+				style={{ position: 'fixed', zIndex: 1, width: '100%', backgroundColor: 'peachpuff' }}
+			>
+				<h3>Курсы валют ЦБ РФ на {todayDate}</h3>
+			</Header>
+			<Content className="site-layout" style={{ padding: '0 50px', marginTop: 64, backgroundColor: 'peachpuff' }}>
+				{/* <div className='Table'> */}
 				<Table
 					size={'middle'}
 					loading={loading}
@@ -114,11 +124,18 @@ function App() {
 					columns={columns}
 					expandRowByClick={true}
 					components={{ body: { row: RowTooltip } }}
-					pagination={{ pageSize: 10 }}
+					// pagination={{ pageSize: 10 }}
+					pagination={{ pageSize: 50 }} scroll={{ y: 400 }}
 				/>
-				<a href='https://www.cbr-xml-daily.ru/' target="_blank">Used API</a>
-			</div>
-		</div>
+
+				{/* </div> */}
+			</Content>
+
+			<Footer style={{ textAlign: 'center' }}>
+				<a href='https://www.cbr-xml-daily.ru/' target="_blank">Used API https://www.cbr-xml-daily.ru/</a>
+			</Footer>
+		</Layout>
+		// </div>
 	);
 }
 

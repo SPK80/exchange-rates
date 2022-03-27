@@ -49,6 +49,12 @@ function getValute(data) {
 	return data?.Valute ?? [];
 }
 
+function getDate(data) {
+	return data?.Date;
+}
+export function getTodayDate() {
+	return getDate(daysData[0]);
+}
 
 export async function loadToday() {
 	try {
