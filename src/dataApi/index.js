@@ -1,5 +1,5 @@
 import axios from 'axios';
-import dataUrl from './dataUrl.json'
+import serverApi from './serverApi.json'
 
 let daysData;
 
@@ -37,12 +37,10 @@ async function loadPreviousDay() {
 	}
 }
 
-const maxRequestsPerSecond = 5;
-
 export async function loadPreviousDays(daysNumber = 9) {
 	let dayCount = daysNumber;
 	do {
-		await delay(1000 / maxRequestsPerSecond);
+		await delay(1000 / serverApi.MaxRequestsPerSecond);
 		await loadPreviousDay();
 	} while (--dayCount > 0);
 }
@@ -54,7 +52,7 @@ function getValute(data) {
 
 export async function loadToday() {
 	try {
-		const dailyData = await fetchDaily(dataUrl.TodayDailyUrl);
+		const dailyData = await fetchDaily(serverApi.TodayDailyUrl);
 		if (!dailyData) throw ('Error fetchDaily!');
 		daysData = [dailyData];
 	} catch (error) {
