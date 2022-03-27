@@ -116,6 +116,7 @@ function App() {
 					components={{ body: { row: RowTooltip } }}
 					pagination={{ pageSize: 10 }}
 				/>
+				<a href='https://www.cbr-xml-daily.ru/' target="_blank">Used API</a>
 			</div>
 		</div>
 	);
