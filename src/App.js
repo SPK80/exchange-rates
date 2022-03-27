@@ -1,26 +1,49 @@
-import { Button, Table, Tooltip } from 'antd';
+import { Table, Tooltip } from 'antd';
 import './App.css';
 import 'antd/dist/antd.css';
 import { useEffect, useState } from 'react';
-import { getDailyValute, getLastDaysOf } from './dataApi';
+import { getToDayValute, getLastDaysOf, loadToday, loadPreviousDays} from './dataApi';
 
 function App() {
 
 	const [loading, setLoading] = useState(false);
 	const [dataSource, setDataSource] = useState([]);
 
-	async function getData() {
-		setLoading(true);
+	useEffect(loadData, []);
+
+	async function loadData() {
+		let todayData;
 		try {
-			setDataSource(prepareData(await getDailyValute()));
+			setLoading(true);
+			await loadToday();
+			todayData = prepareData(await getToDayValute());
+			setDataSource(todayData);
 		} catch (error) {
 			console.error(error);
+			return;
 		} finally {
 			setLoading(false);
 		}
-	}
 
-	useEffect(getData, []);
+		try {
+			await loadPreviousDays();
+			setDataSource(todayData
+				.map(valute => ({
+					...valute,
+					children: getLastDaysOf(valute.CharCode)
+						.map(({ Value, Previous }, index) => ({
+							key: valute.CharCode + index,
+							Value,
+							Previous,
+							delta: calcDeltaPercent(Value, Previous),
+						}))
+				}))
+			);
+		} catch (error) {
+			console.error(error);
+			return;
+		}
+	}
 
 	const columns = [
 		{
@@ -68,14 +91,7 @@ function App() {
 
 	function prepareData(valute) {
 		if (!valute) return []
-		function prepareChildData(charCode) {
-			const data = getLastDaysOf(charCode)
-			return data.map((valute, index) => ({
-				Value: valute.Value,
-				key: charCode + index,
-				delta: calcDeltaPercent(valute.Value, valute.Previous),
-			}))
-		}
+
 		return [
 			...Object.values(valute)
 				.map(valute => ({
@@ -84,13 +100,12 @@ function App() {
 					CharCode: valute.CharCode,
 					Value: valute.Value,
 					delta: calcDeltaPercent(valute.Value, valute.Previous),
-					children: prepareChildData(valute.CharCode),
+					children: [],
 				}))
 		];
 	}
 
 	return (
-
 		<div className='Wrapper'>
 			<div className='Table'>
 				<Table
