@@ -2,7 +2,7 @@ import { Table, Tooltip } from 'antd';
 import './App.css';
 import 'antd/dist/antd.css';
 import { useEffect, useState } from 'react';
-import { getToDayValute, getLastDaysOf, loadToday, loadPreviousDays} from './dataApi';
+import { getToDayValute, getLastDaysOf, loadToday, loadPreviousDays } from './dataApi';
 
 function App() {
 
@@ -60,7 +60,6 @@ function App() {
 			key: 'delta',
 			title: 'Δ',
 			dataIndex: 'delta',
-			width: '10%',
 			render: delta => {
 				let trendClass = 'LateralTrend'
 				if (delta >= 0.1) trendClass = 'RisingTrend'
