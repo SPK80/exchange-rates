@@ -3,14 +3,6 @@ import serverApi from './serverApi.json'
 
 let daysData;
 
-function delay(delayInms) {
-	return new Promise(resolve => {
-		setTimeout(() => {
-			resolve(delayInms);
-		}, delayInms);
-	});
-}
-
 async function fetchDaily(dailyUrl) {
 	try {
 		const response = await axios.get(dailyUrl);
@@ -37,18 +29,22 @@ async function loadPreviousDay() {
 	}
 }
 
-export async function loadPreviousDays(daysNumber = 9) {
-	let dayCount = daysNumber;
-	do {
-		await delay(1000 / serverApi.MaxRequestsPerSecond);
-		await loadPreviousDay();
-	} while (--dayCount > 0);
+export function loadPreviousDays(daysNumber = 9) {
+	return new Promise((resolve, reject) => {
+		let dayCount = daysNumber;
+		const interval = 1000 / serverApi.MaxRequestsPerSecond;
+		const promises = [];
+		setTimeout(function continueRun() {
+			promises.push(loadPreviousDay());
+			if (--dayCount > 0) setTimeout(continueRun, interval);
+			else Promise.all(promises).then(resolve).catch(reject);
+		}, interval);
+	});
 }
 
 function getValute(data) {
 	return data?.Valute ?? [];
 }
-
 
 export async function loadToday() {
 	try {
@@ -65,7 +61,6 @@ export async function getToDayValute() {
 }
 
 export async function getDayValute(daysAgo) {
-	console.log(daysData);
 	return getValute(daysData[daysAgo]);
 }
 
