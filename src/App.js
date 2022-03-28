@@ -47,24 +47,26 @@ function App() {
 
 	const columns = [
 		{
-			key: 'CharCode',
+			key: 'NominalAndCharCode',
 			title: 'Букв. код',
-			dataIndex: 'CharCode',
+			dataIndex: 'NominalAndCharCode',
+			render: NominalAndCharCode => <div className='NominalAndCharCode'><b>{NominalAndCharCode}</b></div>
 		},
 		{
 			key: 'Value',
 			title: 'Курс',
 			dataIndex: 'Value',
+			render: Value => Value.toString().replace('.', ',')
 		},
 		{
 			key: 'delta',
 			title: 'Δ',
 			dataIndex: 'delta',
 			render: delta => {
-				let trendClass = 'LateralTrend'
+				let trendClass = 'LateralTrend';
 				if (delta >= 0.1) trendClass = 'RisingTrend'
 				else if (delta <= -0.1) trendClass = 'DownTrend';
-				return (<span className={trendClass}>{`${delta} %`}</span>);
+				return (<span className={trendClass}>{`${delta.toString().replace('.', ',')} %`}</span>);
 			}
 
 		},
@@ -97,6 +99,7 @@ function App() {
 					key: valute.ID,
 					Name: valute.Name,
 					CharCode: valute.CharCode,
+					NominalAndCharCode: `${valute.Nominal} * ${valute.CharCode}`,
 					Value: valute.Value,
 					delta: calcDeltaPercent(valute.Value, valute.Previous),
 					children: [],
@@ -120,7 +123,7 @@ function App() {
 						pageSizeOptions: [5, 10, 50],
 					}}
 				/>
-				<footer><a href='https://www.cbr-xml-daily.ru/' target="_blank">Used API</a></footer>
+				<footer className='Footer'><a href='https://www.cbr-xml-daily.ru/' target="_blank">cbr-xml-daily</a></footer>
 			</div>
 		</div>
 	);

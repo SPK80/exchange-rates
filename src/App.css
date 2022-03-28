@@ -3,7 +3,7 @@
 	display: flex;
   flex-direction: column;
 	padding: 10px;
-	min-width: 260px;
+	min-width: 300px;
 	background-color:peachpuff;
 }
 
@@ -22,4 +22,11 @@
 
 .LateralTrend{
 	color: blue;
+}
+.NominalAndCharCode{
+	text-align: right;
+	padding-right: 2%;
+}
+.Footer{
+
 }
