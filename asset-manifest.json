@@ -1,13 +1,13 @@
 {
   "files": {
     "main.css": "/exchange-rates/static/css/main.aff3e956.css",
-    "main.js": "/exchange-rates/static/js/main.8fa7706d.js",
+    "main.js": "/exchange-rates/static/js/main.aa19a95c.js",
     "index.html": "/exchange-rates/index.html",
     "main.aff3e956.css.map": "/exchange-rates/static/css/main.aff3e956.css.map",
-    "main.8fa7706d.js.map": "/exchange-rates/static/js/main.8fa7706d.js.map"
+    "main.aa19a95c.js.map": "/exchange-rates/static/js/main.aa19a95c.js.map"
   },
   "entrypoints": [
     "static/css/main.aff3e956.css",
-    "static/js/main.8fa7706d.js"
+    "static/js/main.aa19a95c.js"
   ]
 }
