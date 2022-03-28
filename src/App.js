@@ -120,7 +120,7 @@ function App() {
 						pageSizeOptions: [5, 10, 50],
 					}}
 				/>
-				<a href='https://www.cbr-xml-daily.ru/' target="_blank">Used API</a>
+				<footer><a href='https://www.cbr-xml-daily.ru/' target="_blank">Used API</a></footer>
 			</div>
 		</div>
 	);
