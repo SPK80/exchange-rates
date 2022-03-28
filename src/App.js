@@ -114,7 +114,11 @@ function App() {
 					columns={columns}
 					expandRowByClick={true}
 					components={{ body: { row: RowTooltip } }}
-					pagination={{ pageSize: 10 }}
+					pagination={{
+						defaultPageSize: 10,
+						showSizeChanger: true,
+						pageSizeOptions: [5, 10, 50],
+					}}
 				/>
 				<a href='https://www.cbr-xml-daily.ru/' target="_blank">Used API</a>
 			</div>
